@@ -1,20 +1,65 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { assets } from '../assets/assets'; // Asegúrate de que esta ruta sea correcta
 import { useNavigate } from 'react-router-dom';
+import { AppContent } from '../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 export const Login = () => {
+  const navigate = useNavigate();
+  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
 
-  const navigate = useNavigate()
+  const [state, setState] = useState('Sign Up'); // Estado para alternar entre 'Sign Up' y 'Login'
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [state, setState] = useState('Sign Up');
-  const [name,setName] = useState('');
-  const [email,setEmail] = useState('');
-  const [passsword,setPassword] = useState('');
+  const onSubmitHandler = async (e) => {
+    e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
+    axios.defaults.withCredentials = true;
+
+    try {
+      if (state === 'Sign Up') {
+        // Lógica para el registro
+        const { data } = await axios.post(`${backendUrl}/api/auth/register`, {
+          name,
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          getUserData();
+          navigate('/');
+        } else {
+          toast.error(data.message);
+        }
+      } else if (state === 'Login') {
+        // Lógica para el login
+        const { data } = await axios.post(`${backendUrl}/api/auth/login`, {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setIsLoggedin(true);
+          getUserData();
+          navigate('/');
+        } else {
+          toast.error(data.message);
+        }
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Ocurrió un error inesperado');
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400">
-      <img onClick={()=> navigate('/')}
+      <img
+        onClick={() => navigate('/')}
         src={assets.logo}
         alt="logo"
         className="absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer"
@@ -26,12 +71,13 @@ export const Login = () => {
         <p className="mb-6">
           {state === 'Sign Up' ? 'Create your account' : 'Login to your account!'}
         </p>
-        <form>
+        <form onSubmit={onSubmitHandler}>
           {/* Campo Nombre solo en Sign Up */}
           {state === 'Sign Up' && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">
               <img src={assets.person_icon} alt="Person Icon" />
-              <input onChange={e => setName(e.target.Value)}
+              <input
+                onChange={(e) => setName(e.target.value)}
                 value={name}
                 className="bg-transparent outline-none w-full text-white"
                 type="text"
@@ -44,7 +90,8 @@ export const Login = () => {
           {/* Campo Email */}
           <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">
             <img src={assets.mail_icon} alt="Mail Icon" />
-            <input onChange={e => setEmail(e.target.Value)}
+            <input
+              onChange={(e) => setEmail(e.target.value)}
               value={email}
               className="bg-transparent outline-none w-full text-white"
               type="email"
@@ -56,8 +103,9 @@ export const Login = () => {
           {/* Campo Password */}
           <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">
             <img src={assets.lock_icon} alt="Lock Icon" />
-            <input onChange={e => setPassword(e.target.Value)}
-                value={passsword}
+            <input
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
               className="bg-transparent outline-none w-full text-white"
               type="password"
               placeholder="Password"
@@ -66,8 +114,12 @@ export const Login = () => {
           </div>
 
           {state === 'Login' && (
-            <p onClick={()=> navigate('/reset-password')}
-            className="mb-4 text-indigo-500 cursor-pointer">Forgot password?</p>
+            <p
+              onClick={() => navigate('/reset-password')}
+              className="mb-4 text-indigo-500 cursor-pointer"
+            >
+              Forgot password?
+            </p>
           )}
 
           <button
