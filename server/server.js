@@ -13,7 +13,9 @@ const port = process.env.PORT || 4000;
 connectDB();
 
 //conecta de de todas las maneras
-const allowedOrigins = ['http://localhost:5173']
+
+const allowedOrigins = ['http://localhost:5173'];  // Si estás trabajando localmente con Vite
+
 
 app.use(express.json());
 app.use(cookieParser());

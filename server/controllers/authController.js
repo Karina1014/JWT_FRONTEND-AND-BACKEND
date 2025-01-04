@@ -191,15 +191,24 @@ export const verifiEmail = async (req, res) => {
   }
 }
 //Check if user authenticated
-export const isAuthenticated = async (req, res)=>{
-  try {
-    return res.json({ success: true});
+export const isAuthenticated = async (req, res) => {
+  const token = req.cookies.token;  // Obtener el token desde las cookies
 
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'No token provided' });
   }
-}
+
+  try {
+    // Verificar el token JWT
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;  // Asignar el usuario decodificado al request
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
+  }
+};
+
+
 // Send Paswword Rest OTP
 // Send Password Reset OTP
 export const sendResetOtp = async (req, res) => {

@@ -9,15 +9,19 @@ export const getUserData = async (req, res) => {
       return res.json({ success: false, message: 'User not found' });
     }
 
+  
     // Si el usuario se encuentra, devuelve los datos
     res.json({
       success: true,
       userData: {
         name: user.name,
-        isAccountVerified: user.isAccountVerified,
+        isAccountVerified: user.isAccountVerified // Devolver el valor calculado aquí
       },
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });
   }
 };
+
+
+
