@@ -15,7 +15,7 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSubmitHandler = async (e) => {
+  const onSubitHandler = async (e) => {
     e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
     axios.defaults.withCredentials = true;
@@ -52,7 +52,7 @@ export const Login = () => {
         }
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Ocurrió un error inesperado');
+      toast.error(error.message);
     }
   };
 
@@ -71,7 +71,7 @@ export const Login = () => {
         <p className="mb-6">
           {state === 'Sign Up' ? 'Create your account' : 'Login to your account!'}
         </p>
-        <form onSubmit={onSubmitHandler}>
+        <form onSubmit={onSubitHandler}>
           {/* Campo Nombre solo en Sign Up */}
           {state === 'Sign Up' && (
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]">

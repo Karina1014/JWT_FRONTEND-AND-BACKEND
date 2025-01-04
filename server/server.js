@@ -24,4 +24,9 @@ app.get('/', (req, res) => res.send("API working"));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
 
+// Manejo de rutas no encontradas
+app.use((req, res) => {
+    res.status(404).json({ success: false, message: 'Ruta no encontrada' });
+  });
+
 app.listen(port, () => console.log(`Server started on PORT:${port}`));
