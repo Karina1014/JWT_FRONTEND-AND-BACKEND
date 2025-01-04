@@ -26,5 +26,7 @@ npm install react-toastify : es para las alertas de errores
 
 ![image](https://github.com/user-attachments/assets/8ab75b8e-70c4-48d9-8d56-815d6ab86662)
 
+![image](https://github.com/user-attachments/assets/e9bedf5d-973a-4476-a79b-9b1804b88999)
+
 
 
