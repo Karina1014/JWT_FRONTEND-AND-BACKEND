@@ -20,5 +20,10 @@ npx tailwindcss init -p
 
 npm install react-toastify : es para las alertas de errores
 
+## Se logea con el email y password y sale el name al inicia
+
+![image](https://github.com/user-attachments/assets/bc3fa910-c0e0-49af-803e-6696e4f8398a)
+
+
 
 
